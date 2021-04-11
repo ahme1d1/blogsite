@@ -8,6 +8,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AppUser } from 'src/app/models/appuser';
 import { AuthService } from 'src/app/services/auth.service';
+import { SnackbarService } from 'src/app/services/snackbar.service';
 
 @Component({
   selector: 'app-blog-editor',
@@ -29,7 +30,8 @@ export class BlogEditorComponent implements OnInit, OnDestroy {
     private datePipe: DatePipe,
     private blogService: BlogService,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private snackBarService: SnackbarService
   ) {
     if (this.route.snapshot.params.id) {
       this.postId = this.route.snapshot.paramMap.get('id');
@@ -37,9 +39,7 @@ export class BlogEditorComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.authService.appUser$.subscribe(
-      (appUser) => (this.appUser = appUser)
-    );
+    this.authService.appUser$.subscribe((appUser) => (this.appUser = appUser));
     this.setEditorConfig();
 
     if (this.postId) {
@@ -54,19 +54,19 @@ export class BlogEditorComponent implements OnInit, OnDestroy {
   }
 
   saveBlogPost(): any {
-    if (this.postId) {
+    if (this.postId && this.appUser) {
       this.blogService.updatePost(this.postId, this.postData).then(() => {
         this.router.navigate(['/']);
       });
-    } else {
-      this.postData.createdDate = this.datePipe.transform(
-        Date.now(),
-        'MMdd-yyyy HH:mm'
-      );
-      this.postData.author = this.appUser.name;
+    } else if (this.appUser) {
+      this.postData.createdDate = this.datePipe.transform(Date.now());
+      this.postData.author = this.appUser.name || '';
+      console.log(this.postData);
       this.blogService.createPost(this.postData).then(() => {
         this.router.navigate(['/']);
       });
+    } else {
+      this.snackBarService.showSnackBar('Please login first');
     }
   }
 

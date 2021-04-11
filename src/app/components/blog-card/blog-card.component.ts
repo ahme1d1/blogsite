@@ -14,8 +14,7 @@ import { SnackbarService } from 'src/app/services/snackbar.service';
   templateUrl: './blog-card.component.html',
   styleUrls: ['./blog-card.component.scss'],
 })
-export class BlogCardComponent implements OnInit, OnDestroy
-{
+export class BlogCardComponent implements OnInit, OnDestroy {
   blogPost: Post[] = [];
   private unsubscribe$ = new Subject<void>();
   config: any;
@@ -58,6 +57,14 @@ export class BlogCardComponent implements OnInit, OnDestroy
     if (confirm('Are you sure')) {
       this.blogService.deletePost(postId).then(() => {
         this.snackBarService.showSnackBar('Blog post deleted sucessfully!');
+      });
+    }
+  }
+
+  deleteAllCommentForBlog(postId: string): void {
+    if (confirm('Are you sure')) {
+      this.commentService.deleteAllCommentForBlog(postId).then(() => {
+        this.snackBarService.showSnackBar('Comment deleted successfully!');
       });
     }
   }

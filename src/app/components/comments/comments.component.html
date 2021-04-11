@@ -16,16 +16,16 @@
       <form #commentForm="ngForm" (ngSubmit)="commentForm.form.valid && onCommentPost(commentForm)" novalidate>
         <mat-form-field class="full-width">
           <input matInput placeholder="Name" name="commentedBy" [(ngModel)]="comments.commentedBy" #commentedBy="ngModel" required>
-          <mat-error *ngIf="commentForm.submitted && commentedBy.errors?.required">Name is required</mat-error>
+          <mat-error *ngIf="commentForm.submitted || commentedBy.errors?.required">Name is required</mat-error>
         </mat-form-field>
         <mat-form-field class="full-width">
           <input matInput placeholder="Email" name="email" [(ngModel)]="comments.email" #email="ngModel" email required>
-          <mat-error *ngIf="commentForm.submitted && email.errors?.required">Email is required</mat-error>
-          <mat-error *ngIf="commentForm.submitted && email.errors?.email">Invalid email</mat-error>
+          <mat-error *ngIf="commentForm.submitted || email.errors?.required">Email is required</mat-error>
+          <mat-error *ngIf="commentForm.submitted || email.errors?.email">Invalid email</mat-error>
         </mat-form-field>
         <mat-form-field class="full-width">
           <textarea matInput placeholder="Comment" name="content" [(ngModel)]="comments.content" #content="ngModel" required></textarea>
-          <mat-error *ngIf="commentForm.submitted && content.errors?.required">Comment is required</mat-error>
+          <mat-error *ngIf="commentForm.submitted || content.errors?.required">Comment is required</mat-error>
         </mat-form-field>
         <mat-card-actions>
         <button type=" submit" mat-raised-button color="primary">Post Comment</button>

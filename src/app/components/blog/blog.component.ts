@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -12,7 +12,7 @@ import { BlogService } from 'src/app/services/blog.service';
   templateUrl: './blog.component.html',
   styleUrls: ['./blog.component.scss'],
 })
-export class BlogComponent implements OnInit, OnDestroy {
+export class BlogComponent implements OnInit, OnDestroy, AfterViewInit {
   postData: Post = new Post();
   postId: any;
   private unsubscribe$ = new Subject<void>();
@@ -36,6 +36,10 @@ export class BlogComponent implements OnInit, OnDestroy {
       .subscribe((result: Post) => {
         this.postData = result;
       });
+  }
+
+  ngAfterViewInit(): void  {
+    console.log(this.postData, this.postId)
   }
 
   ngOnDestroy(): void {

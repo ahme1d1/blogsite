@@ -32,7 +32,7 @@ export class CommentService {
     return comments;
   }
 
-  deleteAllCommentForBlog(blogId: string): void {
+  deleteAllCommentForBlog(blogId: string): any {
     const commentsToDelete = this.db
       .collection('comments', (ref) => ref.where('blogId', '==', blogId))
       .snapshotChanges();
